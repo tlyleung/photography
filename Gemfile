@@ -12,4 +12,6 @@ gem "jekyll", "~> 4.3.4"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-postcss", "~> 0.5.0"
+  gem "jekyll-seo-tag", "~> 2.8.0"
+  gem "jekyll-sitemap", "~> 1.4.0"
 end
