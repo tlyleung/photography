@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Nunito+Sans:ital,opsz@0,6..12;1,6..12&display=swap" rel="stylesheet">    
+  </head>
+  <body class="px-2 md:px-4 xl:px-6">
+    <header>
+      <h1 class="font-title font-medium tracking-[.2em] uppercase my-2 md:my-4 xl:my-6"><a href="{{ "/" | relative_url }}">{{ site.title }}</a></h1>
+    </header>
+    <main>
+      <dialog id="lightbox" class="fixed inset-0 bg-white backdrop:bg-white outline-none cursor-zoom-out">
+        <button class="fixed top-4 right-4 text-2xl text-zinc-500 hover:text-black outline-none" autofocus>✕</button>
+        <img class="m-auto object-contain max-h-[90vh] max-w-[90vw]" src="" alt="Placeholder">
+        <figcaption class="text-center text-sm text-zinc-500 mt-2"></figcaption>
+      </dialog>
+      {{ content }}
+    </main>
+    <footer class="my-2 md:my-4 xl:my-6 text-sm text-zinc-500">
+      Copyright © {{ 'now' | date: "%Y" }} Timothy Leung. All rights reserved.
+    </footer>
+    <script>
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = lightbox.querySelector('img');
+      const lightboxCaption = lightbox.querySelector('figcaption');
+      const lightboxCloseButton = lightbox.querySelector('button');
+
+      function openLightbox(img) {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.textContent = img.getAttribute("data-exif");
+
+        // Open modal and prevent background scroll
+        lightbox.showModal();
+        document.body.classList.add("overflow-hidden");
+      }
+
+      function closeLightbox() {
+        // Close modal and allow background scroll
+        lightbox.close();
+        document.body.classList.remove("overflow-hidden");
+      }
+
+      lightbox.onclick = closeLightbox;
+      lightboxCloseButton.onclick = closeLightbox;
+    </script>      
+  </body>
+</html>

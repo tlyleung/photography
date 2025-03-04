@@ -1,0 +1,12 @@
+---
+layout: base
+---
+
+<article class="grid gap-2 md:gap-4 xl:gap-6" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="relative bg-zinc-100 px-2 md:px-4 xl:px-6 py-16 md:py-32 xl:py-48 flex flex-col justify-center text-sm md:text-base xl:text-lg">
+    <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%Y" }}</time>
+    <h1 class="block my-4 text-2xl md:text-4xl xl:text-6xl" itemprop="name headline">{{ page.title }}</h1>
+    <p class="text-base md:text-lg xl:text-xl" itemprop="description">{{ page.description }}</p>
+  </header>
+  {{ content }}
+</article>
