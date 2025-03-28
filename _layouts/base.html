@@ -15,10 +15,14 @@
       <h1 class="font-title font-medium tracking-[.2em] uppercase text-zinc-900 dark:text-white my-2 md:my-4 xl:my-6"><a href="{{ "/" | relative_url }}">{{ site.title }}</a></h1>
     </header>
     <main>
-      <dialog id="lightbox" class="fixed inset-0 bg-white dark:bg-zinc-900 backdrop:bg-white dark:backdrop:bg-zinc-900 outline-none cursor-zoom-out">
-        <button class="fixed top-4 right-4 text-2xl text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white outline-none" autofocus>✕</button>
-        <img class="m-auto object-contain max-h-[90vh] max-w-[90vw]" src="" alt="Placeholder">
-        <figcaption class="text-center text-sm text-zinc-900 dark:text-white mt-2"></figcaption>
+      <dialog id="lightbox" class="fixed inset-0 bg-white dark:bg-zinc-900 backdrop:bg-white dark:backdrop:bg-zinc-900 outline-none max-w-screen max-h-screen">
+        <button id="lightboxClose" class="fixed right-4 top-4 w-8 h-8 leading-8 text-center text-2xl text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white outline-none" aria-label="Close lightbox" autofocus>✕</button>
+        <button id="lightboxPrev" class="fixed left-0 top-1/2 -translate-y-1/2 w-8 h-8 leading-8 text-center text-xl text-zinc-500 disabled:hover:text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 disabled:dark:hover:text-zinc-400 dark:hover:text-white disabled:opacity-20 outline-none" aria-label="Previous image">&#10094;</button>
+        <button id="lightboxNext" class="fixed right-0 top-1/2 -translate-y-1/2 w-8 h-8 leading-8 text-center text-xl text-zinc-500 disabled:hover:text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 disabled:dark:hover:text-zinc-400 dark:hover:text-white disabled:opacity-20 outline-none" aria-label="Next image">&#10095;</button>
+        <div class="relative m-auto aspect-[3/2] [max-width:calc(100vw-4rem)] [max-height:calc(100vh-6rem)]">
+          <img class="w-full h-full cursor-zoom-out" src="" alt="">
+        </div>
+        <figcaption class="px-8 h-8 leading-8 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm text-zinc-900 dark:text-white"></figcaption>
       </dialog>
       {{ content }}
     </main>
@@ -26,29 +30,75 @@
       Copyright © {{ 'now' | date: "%Y" }} Timothy Leung. All rights reserved.
     </footer>
     <script>
+      let currentIndex = null;
+
+      const images = Array.from(document.querySelectorAll('img.cursor-zoom-in'));
+
       const lightbox = document.getElementById('lightbox');
-      const lightboxImg = lightbox.querySelector('img');
       const lightboxCaption = lightbox.querySelector('figcaption');
-      const lightboxCloseButton = lightbox.querySelector('button');
+      const lightboxImage = lightbox.querySelector('img');
+      const lightboxClose = lightbox.querySelector('#lightboxClose');
+      const lightboxPrev = lightbox.querySelector('#lightboxPrev');
+      const lightboxNext = lightbox.querySelector('#lightboxNext');
 
-      function openLightbox(img) {
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-        lightboxCaption.textContent = img.getAttribute("data-exif");
-
-        // Open modal and prevent background scroll
+      // Functions
+      function openLightbox(image) {
+        lightboxImage.src = image.src;
+        lightboxImage.alt = image.alt;
+        lightboxCaption.textContent = (image.getAttribute('data-caption') || '') + ' ' + (image.getAttribute('data-exif') || '');
+        lightboxPrev.disabled = currentIndex === 0;
+        lightboxNext.disabled = currentIndex === images.length - 1;
+        if (image.getAttribute('data-orientation') === 'portrait') {
+          lightboxImage.parentElement.classList.remove('aspect-[3/2]');
+          lightboxImage.parentElement.classList.add('aspect-[2/3]');
+        } else {
+          lightboxImage.parentElement.classList.remove('aspect-[2/3]');
+          lightboxImage.parentElement.classList.add('aspect-[3/2]');
+        }
         lightbox.showModal();
-        document.body.classList.add("overflow-hidden");
+        document.body.classList.add("overflow-hidden");  // Prevent background scroll
+        
       }
 
       function closeLightbox() {
-        // Close modal and allow background scroll
         lightbox.close();
-        document.body.classList.remove("overflow-hidden");
+        document.body.classList.remove("overflow-hidden"); // Allow background scroll
       }
 
-      lightbox.onclick = closeLightbox;
-      lightboxCloseButton.onclick = closeLightbox;
+      lightboxImage.onclick = closeLightbox;
+      lightboxClose.onclick = closeLightbox;
+
+      // Event listeners
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.open) return;
+
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && currentIndex > 0) {
+          openLightbox(images[--currentIndex]);
+        } else if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && currentIndex < images.length - 1) {
+          openLightbox(images[++currentIndex]);
+        }
+      });
+
+      images.forEach((image, index) => {
+        image.addEventListener('click', () => {
+          currentIndex = index;
+          openLightbox(images[currentIndex]);
+        });
+      });
+
+      lightboxPrev.onclick = () => {
+        if (currentIndex > 0) {
+          openLightbox(images[--currentIndex]);
+        }
+      };
+
+      lightboxNext.onclick = () => {
+        if (currentIndex < images.length - 1) {
+          openLightbox(images[++currentIndex]);
+        }
+      };
     </script>      
   </body>
 </html>

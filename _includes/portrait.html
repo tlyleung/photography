@@ -1,4 +1,4 @@
 <figure class="aspect-[3/2] bg-zinc-100 dark:bg-white/5 p-2 md:p-4 xl:p-6">
-  <img class="cursor-zoom-in m-auto max-h-full max-w-full" src="{{ include.src }}" alt="{{ include.alt }}" data-exif="{{ include.exif }}" loading="lazy" onclick="openLightbox(this)">
+  <img class="cursor-zoom-in m-auto max-h-full max-w-full" src="{{ include.src }}" alt="{{ include.alt }}" data-caption="{{ include.caption }}" data-exif="{{ include.exif }}" data-orientation="portrait" loading="lazy">
   {% if include.caption %}<figcaption class="text-center text-zinc-900 dark:text-white text-sm mt-2">{{ include.caption }}</figcaption>{% endif %}
 </figure>
