@@ -54,7 +54,7 @@
       function openLightbox(image) {
         lightboxImage.src = image.src;
         lightboxImage.alt = image.alt;
-        lightboxCaption.textContent = (image.getAttribute('data-caption') || '') + ' ' + (image.getAttribute('data-exif') || '');
+        lightboxCaption.textContent = image.getAttribute('data-exif') || '';
         lightboxLink.href = "https://contentcredentials.org/verify?source=" + encodeURIComponent(image.src);
         lightboxPrev.disabled = currentIndex === 0;
         lightboxNext.disabled = currentIndex === images.length - 1;
