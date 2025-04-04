@@ -1,5 +1,5 @@
 <figure class="grid grid-cols-2 gap-x-2 md:gap-x-4 xl:gap-x-6">
-  <img class="cursor-zoom-in" src="{{ include.src_left }}" alt="{{ include.alt_left }}" data-caption="{{ include.caption_left }}" data-exif="{{ include.exif_left }}" data-orientation="portrait" loading="lazy">
-  <img class="cursor-zoom-in" src="{{ include.src_right }}" alt="{{ include.alt_right }}" data-caption="{{ include.caption_right }}" data-exif="{{ include.exif_right }}" data-orientation="portrait" loading="lazy">
+  <img class="cursor-zoom-in" src="{{ include.src_left }}" alt="{{ include.alt_left }}" data-caption="{{ include.caption_left }}" data-exif="{{ include.exif_left }}" data-orientation="portrait" width="1360" height="2048" loading="lazy">
+  <img class="cursor-zoom-in" src="{{ include.src_right }}" alt="{{ include.alt_right }}" data-caption="{{ include.caption_right }}" data-exif="{{ include.exif_right }}" data-orientation="portrait" width="1360" height="2048" loading="lazy">
   {% if include.caption_left and include.caption_right %}<figcaption class="col-span-2 text-zinc-900 dark:text-white text-sm mt-2">Left: {{ include.caption_left }} Right: {{ include.caption_right }}</figcaption>{% endif %}
 </figure>
